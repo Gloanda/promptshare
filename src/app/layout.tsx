@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import Provider from "@/components/provider";
 import "@/styles/globals.css";
 
 export const metadata = {
@@ -10,13 +11,15 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <div className="main">
-          <div className="gradient" />
-        </div>
-        <main className="app">
-          <Navbar />
-          {children}
-        </main>
+        <Provider>
+          <div className="main">
+            <div className="gradient" />
+          </div>
+          <main className="app">
+            <Navbar />
+            {children}
+          </main>
+        </Provider>
       </body>
     </html>
   );
