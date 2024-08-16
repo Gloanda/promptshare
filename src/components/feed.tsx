@@ -1,5 +1,7 @@
 "use client";
 
+import { useDebouncedCallback } from "use-debounce";
+
 import { useEffect, useState } from "react";
 
 import PromptCard from "@/components/prompt-cardt";
@@ -19,21 +21,38 @@ function PromptCardList({ data, handleTagClick }) {
 }
 
 function Feed() {
-  const [searchText, setSearchText] = useState("");
   const [posts, setPosts] = useState([]);
-
-  function handleSearchChange(e) {}
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
   async function fetchPosts() {
     const response = await fetch("/api/prompt");
     const data = await response.json();
 
     setPosts(data);
+    setFilteredPosts(data);
   }
 
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  const filterPrompts = (searchtext) => {
+    const regex = new RegExp(searchtext, "i");
+    const filteredPosts = posts.filter(
+      (post) =>
+        regex.test(post.creator.username) ||
+        regex.test(post.tag) ||
+        regex.test(post.prompt)
+    );
+    return filteredPosts;
+  };
+
+  const handleSearchChange = useDebouncedCallback((text: string) => {
+    const searchResult = filterPrompts(text);
+    setFilteredPosts(searchResult);
+  }, 500);
+
+  const handleTagClick = (e) => {};
 
   return (
     <section className="feed">
@@ -41,14 +60,18 @@ function Feed() {
         <input
           type="text"
           placeholder="Search for tag or username"
-          value={searchText}
-          onChange={handleSearchChange}
+          onChange={(e) => {
+            handleSearchChange(e.target.value);
+          }}
           required
           className="search_input peer"
         />
       </form>
 
-      <PromptCardList data={posts} handleTagClick={() => {}}></PromptCardList>
+      <PromptCardList
+        data={filteredPosts}
+        handleTagClick={handleTagClick}
+      ></PromptCardList>
     </section>
   );
 }
