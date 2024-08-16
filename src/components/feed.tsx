@@ -23,6 +23,7 @@ function PromptCardList({ data, handleTagClick }) {
 function Feed() {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   async function fetchPosts() {
     const response = await fetch("/api/prompt");
@@ -52,7 +53,11 @@ function Feed() {
     setFilteredPosts(searchResult);
   }, 500);
 
-  const handleTagClick = (e) => {};
+  const handleTagClick = (tagName) => {
+    setSearchText(tagName)
+    const searchResult = filterPrompts(tagName);
+    setFilteredPosts(searchResult);
+  };
 
   return (
     <section className="feed">
@@ -60,7 +65,9 @@ function Feed() {
         <input
           type="text"
           placeholder="Search for tag or username"
+          value={searchText}
           onChange={(e) => {
+            setSearchText(e.target.value);
             handleSearchChange(e.target.value);
           }}
           required
