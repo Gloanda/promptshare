@@ -2,14 +2,9 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-
-
 import { useEffect, useState } from "react";
 
-
-
 import Form from "@/components/form";
-
 
 function EditPrompt() {
   const router = useRouter();
@@ -42,7 +37,9 @@ function EditPrompt() {
     e.preventDefault();
     setSubmitting(true);
 
-    if (!promptId) {return alert("Prompt ID not found")}
+    if (!promptId) {
+      return alert("Prompt ID not found");
+    }
 
     try {
       const response = await fetch(`/api/prompt/${promptId}`, {

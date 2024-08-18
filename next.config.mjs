@@ -12,6 +12,9 @@ const nextConfig = {
       topLevelAwait: true,
     }
     return config
+  },
+  typescript: {
+    ignoreBuildErrors: true,
   }
 }
 

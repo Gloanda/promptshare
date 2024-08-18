@@ -1,6 +1,7 @@
 import Navbar from "@/components/navbar";
 import Provider from "@/components/provider";
 import "@/styles/globals.css";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "PromptShare",
@@ -17,7 +18,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           </div>
           <main className="app">
             <Navbar />
-            {children}
+            <Suspense>
+              {children}
+            </Suspense>
           </main>
         </Provider>
       </body>
